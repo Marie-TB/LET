@@ -10,7 +10,7 @@ library(stringr)
 
 # Cargar Base de Datos ----------------------------------------------------
 
-datos <- read_csv(here::here("datos/dataset.csv"))
+datos <- read_csv(here::here("Datos/dataset.csv"))
 
 
 

@@ -1,0 +1,29 @@
+Variable,Contenido
+authors:,ID-Autor(es) (lista de str)
+bestsellers-rank:,ID-Ranking de los artículos más vendidos (int)
+categories:,ID-Categorías. (lista de str)
+description:,Descripción (str)
+dimension-x:,Dimensión X (float en cm)
+dimension-y:,Dimensión Y (float en cm)
+dimension-z:,Dimensión Z (float en cm)
+edition:,Edición (str)
+edition-statement:,Declaración de edición (str)
+for-ages:,Rango de edades (str)
+format:,ID-Formato. (int)
+id:,Identificador único (int)
+illustrations-note:,Sin información registrada
+image-checksum:,Suma de comprobación de la imagen de portada
+image-path:,Ruta del archivo de la imagen de portada
+image-url:,URL de la imagen de portada
+imprint:,No hay información registrada
+index-date:,Fecha de rastreo (date)
+isbn10:,ISBN-10 (str)
+isbn13:,ISBN-13 (str)
+lang:,Idioma del artículo de la página
+publication-date:,Fecha de publicación (date)
+publication-place:,ID-Lugar de publicación (int)
+rating-avg:,Calificación promedio 0-5
+rating-count:,Número de calificaciones
+title:,Título del libro (str)
+url:,URL relativa ( https://bookdepository.com + url)
+weight:,Peso (en kg)

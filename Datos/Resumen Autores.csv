@@ -1,0 +1,3 @@
+Variable,Contenido
+author_id:,ID-Autor (int)
+author_name:,Nombre del autor correspondiente al ID (str)

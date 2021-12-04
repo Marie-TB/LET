@@ -169,9 +169,9 @@ Por último, en función de estos datos, se busca responder las siguientes inter
 
 4. ¿Qué relación existe entre los autores Top-Seller y dichas categorías?
 
-5. ¿Cuáles son los libros, entre los 10.000 Top-Seller por autor y categoría, con un rating_avg = 5 ?
+5. ¿Existe algún autor, especializado en alguna de las 10 categorías principales y que posea un libro entre los 10.000 Top-Seller , con un rating_avg = 5 ?
 
-# `r emo::ji("notebook")` Análisis
+# `r emo::ji("blue_book")` Análisis
 
 Cada persona tiene gustos propios y estos no tienen por qué ser idénticos a los de otras personas. Sin embargo, esto no significa que no existan preferencias en común. Como consecuencia, cuando existen muchas personas con una misma inclinación, se generan tendencias y, en el caso de los libros, se ven reflejadas en los Top-Seller. Por este motivo, para entender el posicionamiento de libros en base al autor y categoría de estos, se responderá la pregunta “¿Quiénes son los autores de los 10 libros Top-Seller en Book Depository?”, con el siguiente gráfico de barras:
 
@@ -183,7 +183,7 @@ knitr::include_graphics(here::here("Figuras/Top 10 Autores.png"))
 
 Se observa que, quien posee más libros entre los 10.000 Top-Seller es la autora inglesa Julia Donaldson; famosa por sus libros ilustrados para infantes, como la serie literaria "El Grúfalo". Tras ella, se encuentra J.K. Rowling, autora famosa por su saga juvenil de fantasía "Harry Potter" con sus múltiples ediciones especiales por aniversarios. También se aprecia que, hay una cantidad no menor de libros que poseen como autor “NA”. Esto significa que, a esos 43 libros no se les registró el autor en los datos (datos faltantes)
 
-En base a lo anterior, se genera la segunda interrogante planteada en la presentación de los datos, que es: ¿Cuál es la apreciación del público? Para resolverla, se tomó las calificaciones de la base de datos, que poseen un rango del 1 al 5, donde 5 es la mejor valoración. Luego, se promedió por autor y se resumió en la siguiente tabla:
+En base a lo anterior, se genera la segunda interrogante planteada en la presentación de los datos, que es: ¿Cuál es la apreciación del público? Para resolverla, se tomó las calificaciones de la base de datos, que poseen un rango del 0 al 5, donde 5 es la mejor valoración. Luego, se promedió por autor y se resumió en la siguiente tabla:
 
 ```{r echo=FALSE}
 eval_media_autores %>% 
@@ -216,23 +216,38 @@ El cuestionamiento anterior, es el motivo de la pregunta "¿qué relación exist
 knitr::include_graphics(here::here("Figuras/Categorias por autores.png"))
 ```
 
-Se observa que, al intersectar las categorías con los autores, desaparecen *Graphic Novels: Anime & Manga* y *Sci Fi Books for Kids*. Esto se debe a que ninguno de los 10 principales autores es dueño de algún libro clasificado en esas categorías. Sin embargo, se observa el caso contrario con algunos autores, es decir, poseen muchos libros en una categoría. Por ejemplo, J.K. Rowling en *Fantasy Books for Kids*. 
+Se observa que, al intersectar las categorías con los autores, desaparecen *Graphic Novels: Anime & Manga* y *Sci Fi Books for Kids*. Esto se debe a que ninguno de los 10 principales autores es dueño de algún libro clasificado en esas categorías. Sin embargo, se observa el caso contrario con algunos escritores, es decir, poseen muchos libros en una categoría. Por ejemplo, J.K. Rowling en *Fantasy Books for Kids*. 
 
-En consecuencia, se podría insinuar que existe una especialización que provoca que la escritora posea una buena calificación promedio en el rating_avg. Sin embargo, esto se descarta al considerar las puntuaciones de libros individuales con puntuación perfecta (5), independientemente del autor, como se muestra a continuación:
+En consecuencia, se puede insinuar que existe una especialización de J.K. Rowling en dicha categoría, provocando que ella posea un promedio alto en rating_avg. Por este motivo, se decidió mostrar los autores que poseían al menos una calificación en algunos de sus libros, pertenecientes a las 10 categorías principales del Top-Seller.
+
 
 ```{r echo=FALSE}
 puntuacion_perfecta <- por_autor %>% 
   filter(rating_avg == 5) %>% 
-  filter(author_name %in% autores_crudo$author_name[1:3]) %>% 
   separate_rows(categories, sep = ", ") %>% 
   mutate(categories = as.numeric(str_remove_all(categories, "\\[|\\]"))) %>% 
   left_join(Categorias, by = c("categories" = "category_id")) %>% 
-  select(title, category_name, author_name, rating_avg)
+  select(title, category_name, author_name, rating_avg) %>% 
+  filter(category_name %in% categorias_crudo$category_name[1:10]) 
 distinct(puntuacion_perfecta, title, .keep_all = TRUE) %>% 
   gt()
 ```
 
-Esta tabla muestra todos los libros que presentan categorías y escritores pertenecientes al top 10, respectivamente. Entonces, considerando estos datos en conjunto con el último gráfico de barras, se aprecia que un autor puede tener una puntuación perfecta en rating_avg, aunque no se 'especialice' en una categoría en específica, como es el caso de Axel Scheffler, quien posee libros en 5 categorías distintas. 
+Se observa que, en la columna de author_name hay muchas personas que consiguieron una puntuación perfecta en sus libros, pero no son parte de los 10 autores con más libros entre los Top-Seller de la página. Por lo tanto, se realizó un filtro en base a ese criterio, logrando contestar la última pregunta: "¿Existe algún autor, especializado en alguna de las 10 categorías principales y que posea un libro entre los 10.000 Top-Seller , con un rating_avg = 5 ?"
+
+```{r echo=FALSE}
+
+distinct(puntuacion_perfecta, title, .keep_all = TRUE) %>% 
+  filter(author_name %in% autores_crudo$author_name[1:10]) %>% 
+  gt()
+
+```
+
+Como se puede observar, J.K. Rowling obtuvo un rating_avg = 5 en uno de sus libros pertenecientes a la categoría *Contemporary Fiction* que **NO** es la misma clasificación que se asumió la existencia de una especialización por parte de la autora. También se observa que, el autor Axel Scheffler obtuvo una puntuación perfecta, pese a que él posee una variedad de clasificaciones, con respecto a la categoría, de sus libros; tales como *Adventure Books for Kids*, *Children's Fiction*, *Fantasy Books for Kids*, entre otros. 
+
+# `r emo::ji("notebook")` Conclusión
+
+
 
 # `r emo::ji("pen")` Anexo 1: Bases de datos
 
@@ -244,69 +259,23 @@ El detalle de cada base de datos se muestra a continuación:
 
 Contiene 28 columnas con información detallada con respecto a los artículos ofrecidos por la página.
 
-1) authors: ID-Autor(es) (lista de str)
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+resumen_datasett <- read_csv(here::here("Datos/Resumen Dataset.csv"))
+resumen_datasett %>% 
+  gt()
+```
 
-2) bestsellers-rank: ID-Ranking de los artículos más vendidos (int)
- 
-3) categories: ID-Categorías. (lista de str)
- 
-4) description: Descripción (str)
- 
-5) dimension-x: Dimensión X (float en cm)
- 
-6) dimension-y: Dimensión Y (float en cm)
- 
-7) dimension-z: Dimensión Z (float en mm)
- 
-8) edition: Edición (str)
- 
-9) edition-statement: Declaración de edición (str)
-
-10) for-ages: Rango de edades (str)
-
-11) format: ID-Formato. (int)
-
-12) id: Identificador único (int)
-
-13) illustrations-note:
-
-14) image-checksum: Suma de comprobación de la imagen de portada
-
-15) image-path: Ruta del archivo de la imagen de portada
-
-16) image-url: URL de la imagen de portada
-
-17) imprint: Lamentablemente no hay información registrada
-
-18) index-date: Fecha de rastreo (date)
-
-19) isbn10: ISBN-10 (str)
-
-20) isbn13: ISBN-13 (str)
-
-21) lang: Idioma del artículo
-
-22) publication-date: Fecha de publicación (date)
-
-23) publication-place: ID-Lugar de publicación (int)
-
-24) rating-avg: Calificación promedio 0-5
-
-25) rating-count: Número de calificaciones
-
-26) title: Título del libro (str)
-
-27) url: URL relativa ( https://bookdepository.com + url)
-
-29) weight: Peso (en kg)
 
 ### Authors
 
 Contiene 2 columnas:
 
-1) author_id: ID-Autor (int)
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+resumen_autores <- read_csv(here::here("Datos/Resumen Autores.csv"))
+resumen_autores %>% 
+  gt()
+```
 
-2) author_name: Nombre del autor correspondiente al ID (str)
 
 ### Categories
 
