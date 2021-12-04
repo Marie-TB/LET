@@ -1,0 +1,355 @@
+---
+title: "Titulo muy ingenioso "
+output:
+  rmdformats::material:
+    highlight: kate
+    self_contained: true
+    thumbnails: true
+    gallery: true
+    fig_width: 4
+    fig_height: 4
+    df_print: kable
+pkgdown:
+  as_is: true    
+---
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+require(tidyverse)
+require(readr)
+require(dplyr)
+require(tidyr)
+require(purrr)
+require(janitor)
+require(stringr)
+require(ggplot2)
+require(gt)
+```
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+
+Datos <- read_csv(here::here("Datos/datos_finales.csv"))
+Autores <- read_csv(here::here("datos/authors.csv"))
+Categorias <- read_csv(here::here("datos/categories.csv"))
+Formatos <- read_csv(here::here("datos/formats.csv"))
+
+# cambiar ID formatos -----------------------------------------------------
+datos <- Datos %>% 
+  left_join(Formatos, by = c("format" = "format_id")) %>% 
+  select(-format)
+datos$format_name[is.na(datos$format_name)] <- "NA" 
+
+# contar formatos
+formatos_crudo <- count(datos, format_name, sort = TRUE)
+df_formatos <- as.data.frame(formatos_crudo)
+
+
+# Cambiar ID autores ------------------------------------------------------
+
+por_autor <- datos %>% 
+  separate_rows(authors, sep = ", ") %>% 
+  mutate(authors = as.numeric(str_remove_all(authors, "\\[|\\]"))) %>% 
+  left_join(Autores, by = c("authors" = "author_id"))
+por_autor$author_name[is.na(por_autor$author_name)] <- "NA" 
+
+
+#contar autores
+autores_crudo <- count(por_autor, author_name, sort = TRUE)
+df_autores <- as.data.frame(autores_crudo)
+
+# Cambiar ID categorías --------------------------------------------------------------
+por_categoria <- datos %>% 
+  separate_rows(categories, sep = ", ") %>% 
+  mutate(categories = as.numeric(str_remove_all(categories, "\\[|\\]"))) %>% 
+  left_join(Categorias, by = c("categories" = "category_id"))
+por_categoria$categories[is.na(por_categoria$category_name)] <- "NA" 
+por_categoria$category_name[por_categoria$category_name == "Thriller Books"] <- "Thriller"
+
+# Unir las categorías de Mangas
+anime_mangas <- por_categoria
+anime_mangas$category_name[anime_mangas$category_name == "Graphic Novels: Manga"] <- "Graphic Novels, Anime & Manga"
+por_categoria$category_name[por_categoria$category_name == "Thriller Books"] <- "Thriller"
+
+# contar categorías (normal)
+
+categorias_crudo <- count(por_categoria, category_name, sort = TRUE)
+df_categorias <- as.data.frame(categorias_crudo)
+
+# contar categorías (fusión mangas)
+mangas_crudo <- count(anime_mangas, category_name, sort = TRUE)
+df_mangas <- as.data.frame(mangas_crudo)
+
+
+# Evaluación promedio por categoría ---------------------------------------
+
+aux_categ=c()
+for (i in 1:10) {
+  anime_mangas %>%
+    filter(category_name == df_mangas$category_name[i])  
+  for (j in 1:9722){
+    posicion=which(anime_mangas$category_name == df_mangas$category_name[i])
+    eval_categoria= anime_mangas$rating_avg[posicion]
+  }
+  eval_categoria <- eval_categoria[!is.na(eval_categoria)]
+  aux_categ = c(aux_categ, round(mean(eval_categoria), 1))
+}
+titulos1 = df_mangas$category_name[1:10]
+eval_media_categ <- as.data.frame(as.matrix(cbind(titulos1, aux_categ), ncol=2) )
+names(eval_media_categ) <- c("Categorias", "Calificacion")
+
+eval_media_categ <- eval_media_categ[order(eval_media_categ$Calificacion, eval_media_categ$Categorias, decreasing = T), ]
+
+
+# Evaluación promedio por Autor -------------------------------------------
+
+aux_autor=c()
+for (i in 1:10) {
+  por_autor %>%
+    filter(author_name == df_autores$author_name[i])  
+  for (j in 1:9722){
+    posicion=which(por_autor$author_name == df_autores$author_name[i])
+    eval_autores= por_autor$rating_avg[posicion]
+  }
+  eval_autores <- eval_autores[!is.na(eval_autores)]
+  aux_autor = c(aux_autor, round(mean(eval_autores), 1))
+}
+titulos2 = df_autores$author_name[1:10]
+
+eval_media_autores <- as.data.frame(as.matrix(cbind(titulos2, aux_autor), ncol=2) )
+names(eval_media_autores) <- c("Autores", "Calificacion")
+eval_media_autores <- eval_media_autores[order(eval_media_autores$Calificacion, eval_media_autores$Autores, decreasing = T), ]
+
+
+```
+
+
+# `r emo::ji("nerd")` Resumen
+
+Resumiendome la vida
+
+
+# `r emo::ji("ledger")` Introducción
+
+En los últimos años, y debido principalmente al confinamiento causado por la pandemia mundial de COVID-19, han proliferado considerablemente las ventas online de artículos de entretenimiento. Una de las categorías destacadas es la de Libros y Literatura, que registró un crecimiento del 16% en sus ventas en línea en 2020, según la empresa internacional SEMrush (Diario Uchile, 2021)
+
+Este comercio digital proporciona información, tanto a los usuarios como a las empresas, acerca de los productos que pueden ser de interés para los compradores y que, próximamente, los vendedores expondrán en la vitrina intangible. Sin entrar mucho en detalle, como ejemplo de empresa que trabaja este formato de ventas tenemos a Book Depository. Esta empresa se destacada por su amplio catálogo de libros con envío gratuito a más de 100 países, incluido Chile. Pero ¿cómo es posible que una empresa pueda ofrecer los mismos productos a un público tan diverso? ¿Cómo sabe la empresa qué títulos y autores ofrecer?
+
+La respuesta fue dicha previamente: transacciones. Cada compra que es realizada se registra y almacena en la base de datos de la empresa, la que se encargará de estudiar la información más relevante, como el autor o género de un libro. Con el fin de entender mejor el fenómeno que constituye un Top-Seller, en el siguiente trabajo analizaremos datos sobre el ranking de los artículos más vendidos en Book Depository, principalmente libros. Así, se espera determinar si existe una relación entre el género y autor de un libro y su posicionamiento como Top-Seller en la página.
+
+Para lograr esta meta, se … (orden del informe lo estableceré una vez finalizado)
+
+# `r emo::ji("notebook with decorative cover")` Datos
+
+En este trabajo se utilizaron las bases de datos publicadas en la página web Kaggle, facilitadas por el usuario 'Panagiotis Simakis', quien recopiló todos los libros registrados en la página Book Depository en un total de 5 tablas, donde 4 son únicamente llaves, respecto a la principal.
+
+La primera es dataset.csv, que contiene 28 columnas con información detallada con respecto a los artículos ofrecidos por la página.(Title, author, isbn, id, rating-avg, etc.)
+
+La segunda, authors.csv, contiene 2 columnas: ID y el respectivo Nombre del Autor.
+
+La tercera, categories.csv, contiene 2 columnas: ID y el respectivo Nombre de la Categoría (Adult, Fantasy, Manga, etc.)
+
+La cuarta tabla se llama formats.csv y contiene 2 columnas: ID y el respectivo formato (Book, CD, Audio, etc.)
+
+La quinta tabla, places.csv, posee 2 columnas: ID y el respectivo lugar de publicación.
+
+La sexta tabla, datos_finales.csv, es el resultado del pre-procesamiento de dataset.csv.
+
+Cabe mencionar lo siguiente:
+
+1. El detalle de cada tabla se encontrará en Anexo 1.
+2. Se modificó la base de datos llamada dataset.csv, dado a que posee 29 variables y más de un millón de datos, con el fin de trabajar con la información más relevante; dando origen a la base de datos: datos_finales.csv.
+3. Places.csv no posee datos registrados. En consecuencia, no se utilizó dicho archivo.
+
+Por último, en función de estos datos, se busca responder las siguientes interrogantes:
+
+1. ¿Quiénes son los autores de los primeros 10 Top-Seller en Book Depository?
+
+2. Estos autores ¿qué valoraciones tienen?
+
+3. ¿Cuáles son las 10 categorías más vendidas?
+
+4. ¿Qué relación existe entre los autores Top-Seller y dichas categorías?
+
+5. ¿Cuáles son los libros, entre los 10.000 Top-Seller por autor y categoría, con un rating_avg = 5 ?
+
+# `r emo::ji("notebook")` Análisis
+
+Cada persona tiene gustos propios y estos no tienen por qué ser idénticos a los de otras personas. Sin embargo, esto no significa que no existan preferencias en común. Como consecuencia, cuando existen muchas personas con una misma inclinación, se generan tendencias y, en el caso de los libros, se ven reflejadas en los Top-Seller. Por este motivo, para entender el posicionamiento de libros en base al autor y categoría de estos, se responderá la pregunta “¿Quiénes son los autores de los 10 libros Top-Seller en Book Depository?”, con el siguiente gráfico de barras:
+
+
+```{r echo=FALSE}
+knitr::include_graphics(here::here("Figuras/Top 10 Autores.png"))
+```
+
+
+Se observa que, quien posee más libros entre los 10.000 Top-Seller es la autora inglesa Julia Donaldson; famosa por sus libros ilustrados para infantes, como la serie literaria "El Grúfalo". Tras ella, se encuentra J.K. Rowling, autora famosa por su saga juvenil de fantasía "Harry Potter" con sus múltiples ediciones especiales por aniversarios. También se aprecia que, hay una cantidad no menor de libros que poseen como autor “NA”. Esto significa que, a esos 43 libros no se les registró el autor en los datos (datos faltantes)
+
+En base a lo anterior, se genera la segunda interrogante planteada en la presentación de los datos, que es: ¿Cuál es la apreciación del público? Para resolverla, se tomó las calificaciones de la base de datos, que poseen un rango del 1 al 5, donde 5 es la mejor valoración. Luego, se promedió por autor y se resumió en la siguiente tabla:
+
+```{r echo=FALSE}
+eval_media_autores %>% 
+  gt() 
+```
+
+Se puede apreciar que, en este caso, J.K.Rowling lidera con una calificación media de 4.5, seguida por Rick Riordan con un 4.4. Sin embargo, este último se encontraba en séptimo lugar en el gráfico anterior. Caso contrario a Julia Donaldson que, en base a la calificación, descendió hasta el quinto puesto; pese a presentar más libros dentro de los Top-Seller.
+
+Puesto que, la calificación fue otorgada al libro, es de suma importancia analizar los autores de este en conjunto con la categoría, lo que implica contestar la tercera y cuarta pregunta: "¿Cuáles son las 10 categorías más vendidas?" y "¿qué relación existe entre los autores Top-Seller y dichas categorías?" Para contestar la primera interrogante, se realizó el siguiente gráfico con las 10 primeras categorías Top-Seller:
+
+```{r echo=FALSE}
+knitr::include_graphics(here::here("Figuras/Top 10 Categorias.png"))
+```
+
+
+Se observa que, existen dos categorías que se pueden fusionar (*Graphic Novels: Manga* y *Graphic Novels: Anime & Manga* ), provocando que esta unión lidere el Top-Seller, tal como se aprecia en el siguiente gráfico:
+
+
+```{r echo=FALSE}
+knitr::include_graphics(here::here("Figuras/Top 10 Categorias (mangas).png"))
+```
+
+
+Las dos figuras anteriores muestran que existe una tendencia muy marcada, en comparación con los autores, en las preferencias de categorías literarias, donde lideran *Graphic Novels: Anime & Manga* y *Contemporary Fiction* con más de 1000 libros cada uno, dentro del Top-Seller. Luego, si se comparan las frecuencias de estas con los autores más populares, se puede cuestionar la existencia de una relación entre ellos, es decir, se pone en duda que los 10 autores del Top-Seller escriben libros clasificados en las categorías vistas en el gráfico.
+
+El cuestionamiento anterior, es el motivo de la pregunta "¿qué relación existe entre los autores Top-Seller y dichas categorías?", mencionada anteriormente. Para responderla, se realizó el siguiente gráfico que contiene las categorías, según los autores del Top-Seller.
+
+
+```{r echo=FALSE}
+knitr::include_graphics(here::here("Figuras/Categorias por autores.png"))
+```
+
+Se observa que, al intersectar las categorías con los autores, desaparecen *Graphic Novels: Anime & Manga* y *Sci Fi Books for Kids*. Esto se debe a que ninguno de los 10 principales autores es dueño de algún libro clasificado en esas categorías. Sin embargo, se observa el caso contrario con algunos autores, es decir, poseen muchos libros en una categoría. Por ejemplo, J.K. Rowling en *Fantasy Books for Kids*. 
+
+En consecuencia, se podría insinuar que existe una especialización que provoca que la escritora posea una buena calificación promedio en el rating_avg. Sin embargo, esto se descarta al considerar las puntuaciones de libros individuales con puntuación perfecta (5), independientemente del autor, como se muestra a continuación:
+
+```{r echo=FALSE}
+puntuacion_perfecta <- por_autor %>% 
+  filter(rating_avg == 5) %>% 
+  filter(author_name %in% autores_crudo$author_name[1:3]) %>% 
+  separate_rows(categories, sep = ", ") %>% 
+  mutate(categories = as.numeric(str_remove_all(categories, "\\[|\\]"))) %>% 
+  left_join(Categorias, by = c("categories" = "category_id")) %>% 
+  select(title, category_name, author_name, rating_avg)
+distinct(puntuacion_perfecta, title, .keep_all = TRUE) %>% 
+  gt()
+```
+
+Esta tabla muestra todos los libros que presentan categorías y escritores pertenecientes al top 10, respectivamente. Entonces, considerando estos datos en conjunto con el último gráfico de barras, se aprecia que un autor puede tener una puntuación perfecta en rating_avg, aunque no se 'especialice' en una categoría en específica, como es el caso de Axel Scheffler, quien posee libros en 5 categorías distintas. 
+
+# `r emo::ji("pen")` Anexo 1: Bases de datos
+
+## {.tabset .tabset-fade .tabset-pills}
+
+El detalle de cada base de datos se muestra a continuación:
+
+### Dataset
+
+Contiene 28 columnas con información detallada con respecto a los artículos ofrecidos por la página.
+
+1) authors: ID-Autor(es) (lista de str)
+
+2) bestsellers-rank: ID-Ranking de los artículos más vendidos (int)
+ 
+3) categories: ID-Categorías. (lista de str)
+ 
+4) description: Descripción (str)
+ 
+5) dimension-x: Dimensión X (float en cm)
+ 
+6) dimension-y: Dimensión Y (float en cm)
+ 
+7) dimension-z: Dimensión Z (float en mm)
+ 
+8) edition: Edición (str)
+ 
+9) edition-statement: Declaración de edición (str)
+
+10) for-ages: Rango de edades (str)
+
+11) format: ID-Formato. (int)
+
+12) id: Identificador único (int)
+
+13) illustrations-note:
+
+14) image-checksum: Suma de comprobación de la imagen de portada
+
+15) image-path: Ruta del archivo de la imagen de portada
+
+16) image-url: URL de la imagen de portada
+
+17) imprint: Lamentablemente no hay información registrada
+
+18) index-date: Fecha de rastreo (date)
+
+19) isbn10: ISBN-10 (str)
+
+20) isbn13: ISBN-13 (str)
+
+21) lang: Idioma del artículo
+
+22) publication-date: Fecha de publicación (date)
+
+23) publication-place: ID-Lugar de publicación (int)
+
+24) rating-avg: Calificación promedio 0-5
+
+25) rating-count: Número de calificaciones
+
+26) title: Título del libro (str)
+
+27) url: URL relativa ( https://bookdepository.com + url)
+
+29) weight: Peso (en kg)
+
+### Authors
+
+Contiene 2 columnas:
+
+1) author_id: ID-Autor (int)
+
+2) author_name: Nombre del autor correspondiente al ID (str)
+
+### Categories
+
+Contiene 2 columnas:
+
+1) category_id: ID-Categoría (int)
+
+2) category_name: Nombre de la categoría correspondiente al ID (str)
+
+### Formats
+
+Contiene 2 columnas:
+
+1) format_id: ID-Formato (int)
+
+2) format_name: Nombre del formato correspondiente al ID (str)
+
+### Places
+
+Contiene 2 columas:
+
+1) place_id: Sin información
+
+2) place_name: Sin información. 
+
+### Datos Finales
+
+Tal como se mencionó en Datos, datos_finales.csv es el resultado del pre-procesamiento de dataset.csv, que se puede ver en detalle en el siguiente [enlace](https://es.wikipedia.org)
+
+
+1) authors :  ID-Autor(es) (lista de str)
+
+2) bestsellers_rank : ID-Ranking de los artículos más vendidos (int)
+
+3) categories : ID-Categorías. (lista de str)
+
+4) format : ID-Formato. (int)
+
+5) id : Identificador único (int)
+
+6) lang : Idioma del artículo
+
+7) rating_avg : Calificación promedio 0-5
+
+8) title : Título del libro (str)
+
