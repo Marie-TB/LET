@@ -1,0 +1,9 @@
+Variable,Contenido
+authors:,ID-Autor(es) (lista de str)
+bestsellers_rank:,ID-Ranking de los artículos más vendidos (int)
+categories,ID-Categorías. (lista de str)
+format,ID-Formato. (int)
+id,Identificador único (int)
+lang,Idioma del artículo
+rating_avg,Calificación promedio 0-5
+title,Título del libro (str)

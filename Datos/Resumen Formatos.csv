@@ -1,0 +1,3 @@
+Variable,Contenido
+format_id:,ID-Formato (int)
+format_name:,Nombre del formato correspondiente al ID (str)

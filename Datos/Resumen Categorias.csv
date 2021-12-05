@@ -1,0 +1,3 @@
+Variable,Contenido
+category_id:,ID-Categoría (int)
+category_name:,Nombre de la categoría correspondiente al ID (str)

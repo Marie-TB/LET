@@ -122,7 +122,7 @@ df_autores %>%
         plot.title = element_text(size=60))+
   ggx::gg_("Center the title please")
 
-
+sum(df_categorias$n[1:10])
 #Categorías
 df_categorias %>%
   filter(n > 360) %>%
