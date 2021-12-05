@@ -1,5 +1,5 @@
 ---
-title: "Titulo muy ingenioso "
+title: "Elementos determinantes en el posicionamiento de los libros en un Top-Seller"
 output:
   rmdformats::material:
     highlight: kate
@@ -124,8 +124,12 @@ eval_media_autores <- eval_media_autores[order(eval_media_autores$Calificacion, 
 
 # `r emo::ji("nerd")` Resumen
 
-Resumiendome la vida
-
+debe tener al rededor de 300 palabras con spoilers :v
+- 1 o 2 oraciones para el tema
+- 1 oracion para el objetivo
+- 1 oracion para los datos
+- 1 oracion para los principales resultados
+- 1 oracion para las principales conclusiones y proyecciones
 
 # `r emo::ji("ledger")` Introducción
 
@@ -133,7 +137,7 @@ En los últimos años, y debido principalmente al confinamiento causado por la p
 
 Este comercio digital proporciona información, tanto a los usuarios como a las empresas, acerca de los productos que pueden ser de interés para los compradores y que, próximamente, los vendedores expondrán en la vitrina intangible. Sin entrar mucho en detalle, como ejemplo de empresa que trabaja este formato de ventas tenemos a Book Depository. Esta empresa se destacada por su amplio catálogo de libros con envío gratuito a más de 100 países, incluido Chile. Pero ¿cómo es posible que una empresa pueda ofrecer los mismos productos a un público tan diverso? ¿Cómo sabe la empresa qué títulos y autores ofrecer?
 
-La respuesta fue dicha previamente: transacciones. Cada compra que es realizada se registra y almacena en la base de datos de la empresa, la que se encargará de estudiar la información más relevante, como el autor o género de un libro. Con el fin de entender mejor el fenómeno que constituye un Top-Seller, en el siguiente trabajo analizaremos datos sobre el ranking de los artículos más vendidos en Book Depository, principalmente libros. Así, se espera determinar si existe una relación entre el género y autor de un libro y su posicionamiento como Top-Seller en la página.
+La respuesta fue dicha previamente: transacciones. Cada compra que es realizada se registra y almacena en la base de datos de la empresa, la que se encargará de estudiar la información más relevante, como el autor o género de un libro. Con el fin de entender mejor el fenómeno que constituye un Top-Seller, en el siguiente trabajo analizaremos datos sobre el ranking de los artículos más vendidos en Book Depository, principalmente libros. Así, se espera determinar que tipo de libros se recomendarían vender, en base al autor, categoría y calificación media de este.
 
 Para lograr esta meta, se … (orden del informe lo estableceré una vez finalizado)
 
@@ -153,12 +157,6 @@ La quinta tabla, places.csv, posee 2 columnas: ID y el respectivo lugar de publi
 
 La sexta tabla, datos_finales.csv, es el resultado del pre-procesamiento de dataset.csv.
 
-Cabe mencionar lo siguiente:
-
-1. El detalle de cada tabla se encontrará en Anexo 1.
-2. Se modificó la base de datos llamada dataset.csv, dado a que posee 29 variables y más de un millón de datos, con el fin de trabajar con la información más relevante; dando origen a la base de datos: datos_finales.csv.
-3. Places.csv no posee datos registrados. En consecuencia, no se utilizó dicho archivo.
-
 Por último, en función de estos datos, se busca responder las siguientes interrogantes:
 
 1. ¿Quiénes son los autores de los primeros 10 Top-Seller en Book Depository?
@@ -170,6 +168,77 @@ Por último, en función de estos datos, se busca responder las siguientes inter
 4. ¿Qué relación existe entre los autores Top-Seller y dichas categorías?
 
 5. ¿Existe algún autor, especializado en alguna de las 10 categorías principales y que posea un libro entre los 10.000 Top-Seller , con un rating_avg = 5 ?
+
+# `r emo::ji("orange_book")` Materiales y métodos
+
+-se presentan los datos: cómo se obtuvieron, qué características tenían originalmente, modificaciones y características base de datos final.
+-se presentan los metodos a utilizar (solo si se usan no descriptivos)
+
+
+## {.tabset .tabset-fade .tabset-pills}
+
+El detalle de cada base de datos se muestra a continuación:
+
+### Dataset
+
+Contiene 28 columnas con información detallada con respecto a los artículos ofrecidos por la página.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+resumen_datasett <- read_csv(here::here("Datos/Resumen Dataset.csv"))
+resumen_datasett %>% 
+  gt()
+```
+
+
+### Authors
+
+Contiene 2 columnas:
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+resumen_autores <- read_csv(here::here("Datos/Resumen Autores.csv"))
+resumen_autores %>% 
+  gt()
+```
+
+
+### Categories
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+resumen_categorias <- read_csv(here::here("Datos/Resumen Categorias.csv"))
+resumen_categorias %>% 
+  gt()
+```
+
+### Formats
+
+Contiene 2 columnas:
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+resumen_formatos <- read_csv(here::here("Datos/Resumen Formatos.csv"))
+resumen_formatos %>% 
+  gt()
+```
+
+### Places
+
+Contiene 2 columas:
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+resumen_places <- read_csv(here::here("Datos/Resumen Places.csv"))
+resumen_places %>% 
+  gt()
+```
+
+### Datos Finales
+
+Tal como se mencionó en Datos, datos_finales.csv es el resultado del pre-procesamiento de dataset.csv, que se puede ver en detalle en el siguiente [enlace](https://github.com/Marie-TB/LET/blob/179f182fbe4e9a1139e26b472e56fc3c0ab97b91/Codigos/Modificacion%20datos,%20graficos%20y%20tablas.R)
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+resumen_df <- read_csv(here::here("Datos/Resumen Datos Finales.csv"))
+resumen_df %>% 
+  gt()
+```
+
 
 # `r emo::ji("blue_book")` Análisis
 
@@ -247,71 +316,9 @@ Por último, se puede apreciar que, J.K. Rowling obtuvo un rating_avg = 5 en uno
 
 # `r emo::ji("notebook")` Conclusión
 
+Según las respuestas encontradas, se concluye que las mejores opciones a ventas son aquellas categorías que poseen muchos libros de autores en específicos que presenten un rating_avg superior a 4, ya que estos duplican, por lo menos, la cantidad de Top-Sellers del resto de libros pertenecientes a otras categorías. También se puede concluir que, otras opciones de ventas son aquellos libros clasificados como *Graphic Novels: Anime & Manga* y *Contemporany fiction*, sí o sólo sí, existe una variedad de autores, dado a que son las categorías que más libros poseen dentro del Top-Seller de Book Depository y, además, varios títulos presentan una calificación perfecta de rating-avg. Por lo tanto, estos resultados evidencian que los mejores tipos de libros para vender son aquellos que pertenezcan a las últimas dos categorías mencionadas y, también, aquellos que se clasifiquen como *Adventure Books for kids*, *Children's Fiction* y *Fantasy Books for Kids* de los autores J.K Rowling, Julia Donaldson, Rick Riordan y Axel Scheffler, dado a que presentan excelentes calificaciones promedio y son los autores que poseen más libros en esas categorías principales. 
+
+Como consecuencia, estos resultados van a variar en el tiempo, puesto a que están basados en las frecuencias de las ventas de libros de ciertas características, por lo que sería interesante tomar en cuenta en un futuro análisis las tendencias a lo largo de los años y los factores sociales de los compradores, para obtener mejores resultados.
 
 
-# `r emo::ji("pen")` Anexo 1: Bases de datos
-
-## {.tabset .tabset-fade .tabset-pills}
-
-El detalle de cada base de datos se muestra a continuación:
-
-### Dataset
-
-Contiene 28 columnas con información detallada con respecto a los artículos ofrecidos por la página.
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-resumen_datasett <- read_csv(here::here("Datos/Resumen Dataset.csv"))
-resumen_datasett %>% 
-  gt()
-```
-
-
-### Authors
-
-Contiene 2 columnas:
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-resumen_autores <- read_csv(here::here("Datos/Resumen Autores.csv"))
-resumen_autores %>% 
-  gt()
-```
-
-
-### Categories
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-resumen_categorias <- read_csv(here::here("Datos/Resumen Categorias.csv"))
-resumen_categorias %>% 
-  gt()
-```
-
-### Formats
-
-Contiene 2 columnas:
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-resumen_formatos <- read_csv(here::here("Datos/Resumen Formatos.csv"))
-resumen_formatos %>% 
-  gt()
-```
-
-### Places
-
-Contiene 2 columas:
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-resumen_places <- read_csv(here::here("Datos/Resumen Places.csv"))
-resumen_places %>% 
-  gt()
-```
-
-### Datos Finales
-
-Tal como se mencionó en Datos, datos_finales.csv es el resultado del pre-procesamiento de dataset.csv, que se puede ver en detalle en el siguiente [enlace](https://github.com/Marie-TB/LET/blob/179f182fbe4e9a1139e26b472e56fc3c0ab97b91/Codigos/Modificacion%20datos,%20graficos%20y%20tablas.R)
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-resumen_df <- read_csv(here::here("Datos/Resumen Datos Finales.csv"))
-resumen_df %>% 
-  gt()
-```
 
