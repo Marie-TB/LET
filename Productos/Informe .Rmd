@@ -124,12 +124,7 @@ eval_media_autores <- eval_media_autores[order(eval_media_autores$Calificacion, 
 
 # `r emo::ji("nerd")` Resumen
 
-debe tener al rededor de 300 palabras con spoilers :v
-- 1 o 2 oraciones para el tema
-- 1 oracion para el objetivo
-- 1 oracion para los datos
-- 1 oracion para los principales resultados
-- 1 oracion para las principales conclusiones y proyecciones
+Los libros son artículos que poseen una amplia variedad de autores y categorías. Por lo que, en este informe se tiene como objetivo determinar que tipo de libros se recomendarían vender, en base al autor, categoría y calificación media de este, por medio de los datos recopilados, de la página Book Depository, que poseen información detallada por libro. El análisis de los datos obtuvo como resultados que las mejores opciones a ventas son aquellas categorías que poseen muchos libros de autores en específicos que presenten una calificación media superior a 4. Sin embargo, estas respuestas pueden variar a lo largo del tiempo dependiendo de las modas.  Por lo que, sería interesante tomar en cuenta en un futuro análisis, las tendencias de los compradores a lo largo de los años.
 
 # `r emo::ji("ledger")` Introducción
 
@@ -138,8 +133,6 @@ En los últimos años, y debido principalmente al confinamiento causado por la p
 Este comercio digital proporciona información, tanto a los usuarios como a las empresas, acerca de los productos que pueden ser de interés para los compradores y que, próximamente, los vendedores expondrán en la vitrina intangible. Sin entrar mucho en detalle, como ejemplo de empresa que trabaja este formato de ventas tenemos a Book Depository. Esta empresa se destacada por su amplio catálogo de libros con envío gratuito a más de 100 países, incluido Chile. Pero ¿cómo es posible que una empresa pueda ofrecer los mismos productos a un público tan diverso? ¿Cómo sabe la empresa qué títulos y autores ofrecer?
 
 La respuesta fue dicha previamente: transacciones. Cada compra que es realizada se registra y almacena en la base de datos de la empresa, la que se encargará de estudiar la información más relevante, como el autor o género de un libro. Con el fin de entender mejor el fenómeno que constituye un Top-Seller, en el siguiente trabajo analizaremos datos sobre el ranking de los artículos más vendidos en Book Depository, principalmente libros. Así, se espera determinar que tipo de libros se recomendarían vender, en base al autor, categoría y calificación media de este.
-
-Para lograr esta meta, se … (orden del informe lo estableceré una vez finalizado)
 
 # `r emo::ji("notebook with decorative cover")` Datos
 
@@ -322,7 +315,7 @@ Por último, se puede apreciar que, J.K. Rowling obtuvo un rating_avg = 5 en uno
 
 Según las respuestas encontradas, se concluye que las mejores opciones a ventas son aquellas categorías que poseen muchos libros de autores en específicos que presenten un rating_avg superior a 4, ya que estos duplican, por lo menos, la cantidad de Top-Sellers del resto de libros pertenecientes a otras categorías. También se puede concluir que, otras opciones de ventas son aquellos libros clasificados como *Graphic Novels: Anime & Manga* y *Contemporany fiction*, sí o sólo sí, existe una variedad de autores, dado a que son las categorías que más libros poseen dentro del Top-Seller de Book Depository y, además, varios títulos presentan una calificación perfecta de rating-avg. Por lo tanto, estos resultados evidencian que los mejores tipos de libros para vender son aquellos que pertenezcan a las últimas dos categorías mencionadas y, también, aquellos que se clasifiquen como *Adventure Books for kids*, *Children's Fiction* y *Fantasy Books for Kids* de los autores J.K Rowling, Julia Donaldson, Rick Riordan y Axel Scheffler, dado a que presentan excelentes calificaciones promedio y son los autores que poseen más libros en esas categorías principales. 
 
-Como consecuencia, estos resultados van a variar en el tiempo, puesto a que están basados en las frecuencias de las ventas de libros de ciertas características, por lo que sería interesante tomar en cuenta en un futuro análisis las tendencias a lo largo de los años y los factores sociales de los compradores, para obtener mejores resultados.
+Como consecuencia, estos resultados van a variar en el tiempo gracias a las modas temporales, puesto a que las respuestas están basadas en las frecuencias de las ventas de libros de ciertas características, por lo que sería interesante tomar en cuenta, en un futuro análisis, las tendencias a lo largo de los años y los factores sociales de los compradores, para obtener mejores resultados.
 
 # `r emo::ji("pen")` Referencias
 
