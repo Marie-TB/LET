@@ -1,7 +1,7 @@
 # :notebook_with_decorative_cover:	 Datos
 Esta carpeta contiene 5 bases de datos en total, donde 4 son únicamente llaves con su respectiva información.
 
-## Dataset.csv
+## Dataset.csv :pen:	
 
 Esta es la base de datos con la que se trabajará en la mayoría del tiempo. La cual contiene:
 1) authors: ID-Autor(es) (lista de str)
@@ -33,25 +33,25 @@ Esta es la base de datos con la que se trabajará en la mayoría del tiempo. La 
 27) url: URL relativa ( https://bookdepository.com + url)
 28) weight: Peso (en kg)
 
-## authors.csv
+## authors.csv :pen:	
 
 Contiene 2 columnas: ID y el respectivo Nombre del Autor
 
-## categories.csv
+## categories.csv :pen:	
 
 Contiene 2 columnas: ID y el respectivo Nombre de la Categoría (Adult, Fantasy, etc.)
 
-## formats.csv
+## formats.csv :pen:	
 
 Contiene 2 columnas: ID y el respectivo formato (Book, CD, Audio, etc.)
 
-## places.csv
+## places.csv :pen:	
 
 Contiene 2 columnas: ID y el respectivo lugar de publicación
 Lamentablemente no presenta datos.
 
 
 
-### Referencias
+### Referencias :pen:	
 
 Panagiotis, S. (2021, agosto). Conjunto de datos de depósito de libros. Kaggle. https://www.kaggle.com/sp1thas/book-depository-dataset?select=dataset.csv 
