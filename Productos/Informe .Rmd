@@ -324,5 +324,32 @@ Según las respuestas encontradas, se concluye que las mejores opciones a ventas
 
 Como consecuencia, estos resultados van a variar en el tiempo, puesto a que están basados en las frecuencias de las ventas de libros de ciertas características, por lo que sería interesante tomar en cuenta en un futuro análisis las tendencias a lo largo de los años y los factores sociales de los compradores, para obtener mejores resultados.
 
+# `r emo::ji("pen")` Referencias
 
+1. Diario Uchile. (2020, 10 junio). *Librerías se reactivan frente a la pandemia: serán consideradas como “bien esencial”*. Recuperado 20 de septiembre de 2021, de https://radio.uchile.cl/2020/06/10/librerias-se-reactivan-frente-a-la-pandemia-seran-consideradas-como-bien-esencial/
 
+2. Panagiotis, S. (2021, agosto). *Conjunto de datos de Book Depository*. Kaggle. https://www.kaggle.com/sp1thas/book-depository-dataset?select=dataset.csv
+
+3. Wickham et al., (2019). *Welcome to the tidyverse*. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+4. Hadley Wickham and Jim Hester (2021). *readr: Read Rectangular Text Data.* R package version 2.0.1. https://CRAN.R-project.org/package=readr
+
+5. Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2021). *dplyr: A Grammar of Data Manipulation*. R package version 1.0.7. https://CRAN.R-project.org/package=dplyr
+
+6. Hadley Wickham (2021). *tidyr: Tidy Messy Data*. R package version 1.1.3. https://CRAN.R-project.org/package=tidyr
+
+7. Lionel Henry and Hadley Wickham (2020). *purrr: Functional Programming Tools*. R package version 0.3.4. https://CRAN.R-project.org/package=purrr
+
+8. Sam Firke (2021). *janitor: Simple Tools for Examining and Cleaning Dirty Data*. R package version 2.1.0. https://CRAN.R-project.org/package=janitor
+
+9. Hadley Wickham (2019). *stringr: Simple, Consistent Wrappers for Common String Operations*. R package version 1.4.0. https://CRAN.R-project.org/package=stringr
+
+10. H. Wickham. *ggplot2: Elegant Graphics for Data Analysis*. Springer-Verlag New York, 2016.
+
+11. Richard Iannone, Joe Cheng and Barret Schloerke (2021). *gt: Easily Create Presentation-Ready Display Tables*. R package version 0.3.1. https://CRAN.R-project.org/package=gt
+
+12. Hadley Wickham (2021). *forcats: Tools for Working with Categorical Variables (Factors)*. R package version 0.5.1. https://CRAN.R-project.org/package=forcats
+
+13. Hadley Wickham, Romain François and Lucy D'Agostino McGowan (2021). *emo: Easily Insert 'Emoji'*. R package version 0.0.0.9000. https://github.com/hadley/emo 
+
+14. Kirill Müller (2020). *here: A Simpler Way to Find Your Files*. R package version 1.0.1. https://CRAN.R-project.org/package=here
