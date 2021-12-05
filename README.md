@@ -2,7 +2,7 @@
 
 Esta carpeta contiene 4 sub-carpetas, con la finalidad de presentar un respectivo orden durante el trabajo que se realice a futuro con una base de datos seleccionada, las cuales son:
 
-### 1) [Codigo](https://marie-tb.github.io/LET/Codigos/)  :ledger:	
+### 1) [Codigos](https://marie-tb.github.io/LET/Codigos/)  :ledger:	
 
 Presenta el/los código(s) utilizado(s) para el procesamiento y análisis de los datos
 
