@@ -169,15 +169,18 @@ Por último, en función de estos datos, se busca responder las siguientes inter
 
 5. ¿Existe algún autor, especializado en alguna de las 10 categorías principales y que posea un libro entre los 10.000 Top-Seller , con un rating_avg = 5 ?
 
+
 # `r emo::ji("orange_book")` Materiales y métodos
 
--se presentan los datos: cómo se obtuvieron, qué características tenían originalmente, modificaciones y características base de datos final.
--se presentan los metodos a utilizar (solo si se usan no descriptivos)
+Para contestar las preguntas planteadas anteriormente se utilizaron las tablas que se encuentran detalladas al final de esta página.
+
+Particularmente, como pre-procesamiento, se modificaron los datos de la tabla dataset, dado a su gran tamaño. Para ello, se importaron los datos a RStudio y se utilizó la librería Tidyverse, que facilitó algunas funciones para conseguir el objetivo.
+
+Una vez importados los datos, se eliminaron todos los registros de los libros que no pertenecían al top 10.000 Best-Seller de Book Depository y aquellos que tuvieran datos faltantes (NA) Luego, se seleccionaron sólo las columnas de utilidad y se guardaron en el archivo llamado datos_finales.csv.
 
 
 ## {.tabset .tabset-fade .tabset-pills}
 
-El detalle de cada base de datos se muestra a continuación:
 
 ### Dataset
 
@@ -250,7 +253,8 @@ knitr::include_graphics(here::here("Figuras/Top 10 Autores.png"))
 ```
 
 
-Se puede observar que, quien posee más libros entre los 10.000 Top-Seller es la autora inglesa Julia Donaldson; famosa por sus libros ilustrados para infantes, como la serie literaria "El Grúfalo". Tras ella, se encuentra J.K. Rowling, autora famosa por su saga juvenil de fantasía "Harry Potter" con sus múltiples ediciones especiales por aniversarios. También se aprecia que, hay una cantidad no menor de libros que poseen como autor “NA”. Esto significa que, a esos 43 libros no se les registró el autor en los datos (datos faltantes)
+Se puede observar que, quien posee más libros entre los 10.000 Top-Seller es la autora inglesa Julia Donaldson; famosa por sus libros ilustrados para infantes, como la serie literaria "El Grúfalo". Tras ella, se encuentra J.K. Rowling, autora famosa por su saga juvenil de fantasía "Harry Potter" con sus múltiples ediciones especiales por aniversarios. También se aprecia que, hay una cantidad no menor de libros que poseen como autor “NA”. Esto significa que, a esos 43 libros no se les registró el autor en los datos.
+
 
 En base a lo anterior, se genera la segunda interrogante planteada en la presentación de los datos, que es: ¿qué valoraciones tienen dichos autores? Para resolverla, se tomó las calificaciones de la base de datos, que poseen un rango del 0 al 5, donde 5 es la mejor valoración. Luego, se promedió por autor y se resumió en la siguiente tabla:
 
