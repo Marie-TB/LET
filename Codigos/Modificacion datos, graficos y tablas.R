@@ -303,3 +303,5 @@ distinct(puntuaciones_min_max, title, .keep_all = TRUE) %>%
   gt()
 
 
+
+
